@@ -17,32 +17,22 @@ public class ClientEvents {
     public static void onToolTip(ItemTooltipEvent event)
     {
         ItemStack item = event.getItemStack();
-        if (item.getItem() instanceof PickaxeItem
-                    || item.getItem() instanceof AxeItem
-                || item.getItem() instanceof ShovelItem
-                || item.getItem() instanceof HoeItem
-                || item.getItem() instanceof BowItem
-                || item.getItem() instanceof SwordItem
-                || item.getItem() instanceof ShieldItem
-                || item.getItem() instanceof FishingRodItem
-                || item.getItem() instanceof TridentItem
-                || item.getItem() instanceof CrossbowItem
-                || item.getItem() instanceof ArmorItem
-                || item.getItem() instanceof ElytraItem
-                || item.getItem() instanceof ShearsItem
-        ) {
+        if (Main.fittingItemType(item))
+        {
             List<Component> tooltop = event.getToolTip();
-            CompoundTag nbt = item.getOrCreateTag();
-            if (!nbt.contains("value")) {
-                nbt.putInt("value", 0);
-                nbt.putInt("maxvalue",100);
-            }
-            int vp = nbt.getInt("value");
-            int maxChanced = nbt.getInt("maxvalue");
+            CompoundTag nbt = item.getTag();
+            if(nbt != null) {
+                if (!nbt.contains("value")) {
+                    nbt.putInt("value", 0);
+                    nbt.putInt("maxvalue", 100);
+                }
+                int vp = nbt.getInt("value");
+                int maxChanced = nbt.getInt("maxvalue");
 
-            System.out.println(item.getDisplayName().getString()+" Erfahrung: " + vp + "/" + maxChanced);
-            if (vp > 0) {
-                tooltop.add(new TextComponent("Erfahrung: " + vp + "/" + maxChanced));
+                System.out.println(item.getDisplayName().getString() + " Erfahrung: " + vp + "/" + maxChanced);
+                if (vp > 0) {
+                    tooltop.add(new TextComponent("Erfahrung: " + vp + "/" + maxChanced));
+                }
             }
         }
     }

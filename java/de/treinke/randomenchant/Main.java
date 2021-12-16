@@ -1,6 +1,7 @@
 package de.treinke.randomenchant;
 
 
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
@@ -39,6 +40,22 @@ public class Main
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
 
+    }
+
+    public static boolean fittingItemType(ItemStack item) {
+        return item.getItem() instanceof PickaxeItem
+                || item.getItem() instanceof AxeItem
+                || item.getItem() instanceof ShovelItem
+                || item.getItem() instanceof HoeItem
+                || item.getItem() instanceof BowItem
+                || item.getItem() instanceof SwordItem
+                || item.getItem() instanceof ShieldItem
+                || item.getItem() instanceof FishingRodItem
+                || item.getItem() instanceof TridentItem
+                || item.getItem() instanceof CrossbowItem
+                || item.getItem() instanceof ArmorItem
+                || item.getItem() instanceof ElytraItem
+                || item.getItem() instanceof ShearsItem;
     }
 
     private void setup(final FMLCommonSetupEvent event)
@@ -220,26 +237,6 @@ public class Main
             System.out.println("Fehler beim Laden der Einstellungen: "+ex.getMessage());
         }
 
-
-
-        try (FileReader writer = new FileReader(ServerLifecycleHooks.getCurrentServer().getWorldData().getLevelName()+File.separator+"randomenchant.levels")) {
-            BufferedReader bw = new BufferedReader(writer);
-
-            while(bw.ready()) {
-                String line = bw.readLine();
-
-                if(line.contains("="))
-                    Events.chances.put(line.substring(0,line.indexOf("=")).trim(),Integer.parseInt(line.substring(line.indexOf("=")+1)));
-            }
-
-            bw.close();
-
-        }catch(Exception ex)
-        {
-            System.out.println("Fehler beim Laden der Level: "+ex.getMessage());
-        }
-
-        /*
         try (FileReader writer = new FileReader(ServerLifecycleHooks.getCurrentServer().getWorldData().getLevelName()+File.separator+"randomenchant.enchantments")) {
             BufferedReader bw = new BufferedReader(writer);
 
@@ -250,7 +247,7 @@ public class Main
                     line = line.substring(0,line.indexOf("#"));
 
                 if(line.contains(":")) {
-                    Events.addPossibleEnchantment(line);
+                    Enchantmentlist.addPossibleEnchantment(line);
                 }
             }
 
@@ -259,7 +256,7 @@ public class Main
         }catch(Exception ex)
         {
             System.out.println("Fehler beim Laden der Verzauberungen: "+ex.getMessage());
-        }*/
+        }
         ServerLifecycleHooks.getCurrentServer().getCommands().performCommand(ServerLifecycleHooks.getCurrentServer().createCommandSourceStack() ,"gamerule sendCommandFeedback false");
 
     }
